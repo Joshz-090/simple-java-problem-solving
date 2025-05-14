@@ -1,65 +1,179 @@
 import java.util.*;
 
-public class Student {
-    private int studentId; // Changed to camelCase for consistency
+public class GPACalculator {
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        System.out.println("🎓 Welcome to the Advanced GPA Calculator 🎓");
+        System.out.println("===========================================");
+
+        // Create a new student
+        Student student = createStudent();
+
+        // Course selection and setup
+        setupCourses(student);
+
+        // Grade entry
+        enterGrades(student);
+
+        // Display results
+        displayResults(student);
+
+        scanner.close();
+    }
+
+    private static Student createStudent() {
+        System.out.println("\n📝 Student Information");
+        System.out.println("---------------------");
+
+        String name = getInput("Enter student name: ",
+                input -> !input.trim().isEmpty(),
+                "Name cannot be empty!");
+
+        return new Student(name);
+    }
+
+    private static void setupCourses(Student student) {
+        System.out.println("\n📚 Course Setup");
+        System.out.println("---------------");
+
+        int numCourses = getIntInput("How many courses are you taking this semester? (1-10): ",
+                1, 10);
+
+        for (int i = 1; i <= numCourses; i++) {
+            System.out.println("\nCourse #" + i);
+            String courseName = getInput("Enter course name: ",
+                    input -> !input.trim().isEmpty(),
+                    "Course name cannot be empty!");
+
+            int credits = getIntInput("Enter credit hours for " + courseName + " (1-5): ",
+                    1, 5);
+
+            student.addCourse(courseName, credits);
+        }
+    }
+
+    private static void enterGrades(Student student) {
+        System.out.println("\n📝 Grade Entry");
+        System.out.println("--------------");
+
+        Map<String, Integer> courses = student.getCourses();
+        for (String course : courses.keySet()) {
+            double grade = getDoubleInput("Enter grade for " + course + " (0-100): ",
+                    0, 100);
+            student.addGrade(course, grade);
+        }
+    }
+
+    private static void displayResults(Student student) {
+        System.out.println("\n📊 Results");
+        System.out.println("----------");
+
+        student.printReportCard();
+
+        System.out.println("\nAdditional Information:");
+        System.out.printf("Total Credits: %d\n", student.getTotalCredits());
+        System.out.printf("GPA (4.0 scale): %.2f\n", student.calculateGPA());
+
+        // Add some ASCII art for fun
+        System.out.println("\n" + getGPAArt(student.calculateGPA()));
+    }
+
+    private static String getGPAArt(double gpa) {
+        if (gpa >= 3.5)
+            return "   ★ ★ ★ ★ ★\n" +
+                    "  EXCELLENT WORK!\n" +
+                    "   ★ ★ ★ ★ ★";
+        else if (gpa >= 2.5)
+            return "   ✓ ✓ ✓ ✓ ✓\n" +
+                    "  GOOD PERFORMANCE\n" +
+                    "   ✓ ✓ ✓ ✓ ✓";
+        else
+            return "   ✚ ✚ ✚ ✚ ✚\n" +
+                    "  ROOM FOR IMPROVEMENT\n" +
+                    "   ✚ ✚ ✚ ✚ ✚";
+    }
+
+    // Utility methods for input validation
+    private static String getInput(String prompt, Validator<String> validator, String errorMsg) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            if (validator.validate(input)) {
+                return input.trim();
+            }
+            System.out.println(errorMsg);
+        }
+    }
+
+    private static int getIntInput(String prompt, int min, int max) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int value = Integer.parseInt(scanner.nextLine());
+                if (value >= min && value <= max) {
+                    return value;
+                }
+                System.out.printf("Please enter a number between %d and %d.\n", min, max);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a whole number.");
+            }
+        }
+    }
+
+    private static double getDoubleInput(String prompt, double min, double max) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                double value = Double.parseDouble(scanner.nextLine());
+                if (value >= min && value <= max) {
+                    return value;
+                }
+                System.out.printf("Please enter a number between %.1f and %.1f.\n", min, max);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
+    @FunctionalInterface
+    private interface Validator<T> {
+        boolean validate(T input);
+    }
+}
+
+class Student {
     private String studentName;
-    private Map<String, Double> grades;
-    private Map<String, Integer> courseCredits;
+    private Map<String, Integer> courses; // Course name to credit hours
+    private Map<String, Double> grades; // Course name to grade
 
-    public Student(int studentId, String studentName) {
-        setStudentId(studentId);
-        setStudentName(studentName);
+    public Student(String studentName) {
+        this.studentName = studentName;
+        this.courses = new LinkedHashMap<>();
         this.grades = new LinkedHashMap<>();
-        this.courseCredits = new LinkedHashMap<>();
-        initializeCourseCredits();
     }
 
-    private void initializeCourseCredits() {
-        courseCredits.put("Static and Probability", 3);
-        courseCredits.put("Object Oriented Programming", 3);
-        courseCredits.put("Operating System", 4);
-        courseCredits.put("Fundamentals of Software", 4);
-        courseCredits.put("Computer Architecture", 3);
-        courseCredits.put("Data Structure", 3);
+    public void addCourse(String courseName, int credits) {
+        courses.put(courseName, credits);
     }
 
-    // Properly validated setters
-    public void setStudentId(int studentId) {
-        if (studentId <= 0) {
-            throw new IllegalArgumentException("Student ID must be positive");
-        }
-        this.studentId = studentId;
-    }
-
-    public void setStudentName(String studentName) {
-        if (studentName == null || studentName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Student name cannot be empty");
-        }
-        this.studentName = studentName.trim();
-    }
-
-    // Getters
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public Map<String, Double> getGrades() {
-        return new LinkedHashMap<>(grades); // Return a copy to maintain encapsulation
-    }
-
-    public boolean addGrade(String course, double grade) {
-        if (!courseCredits.containsKey(course)) {
+    public boolean addGrade(String courseName, double grade) {
+        if (!courses.containsKey(courseName)) {
             return false;
         }
         if (grade < 0 || grade > 100) {
             return false;
         }
-        grades.put(course, grade);
+        grades.put(courseName, grade);
         return true;
+    }
+
+    public Map<String, Integer> getCourses() {
+        return new LinkedHashMap<>(courses);
+    }
+
+    public int getTotalCredits() {
+        return courses.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     private String getLetterGrade(double grade) {
@@ -89,6 +203,7 @@ public class Student {
     private double getGradePoints(String letterGrade) {
         switch (letterGrade) {
             case "A+":
+                return 4.0;
             case "A":
                 return 4.0;
             case "A-":
@@ -98,9 +213,9 @@ public class Student {
             case "B":
                 return 3.0;
             case "B-":
-                return 2.75;
-            case "C+":
                 return 2.5;
+            case "C+":
+                return 2.25;
             case "C":
                 return 2.0;
             case "C-":
@@ -119,7 +234,7 @@ public class Student {
         for (Map.Entry<String, Double> entry : grades.entrySet()) {
             String course = entry.getKey();
             double grade = entry.getValue();
-            int credits = courseCredits.get(course);
+            int credits = courses.get(course);
 
             String letterGrade = getLetterGrade(grade);
             double gradePoints = getGradePoints(letterGrade);
@@ -131,68 +246,3 @@ public class Student {
         return totalCredits == 0 ? 0.0 : totalGradePoints / totalCredits;
     }
 
-    public void printReportCard() {
-        System.out.println("\n📄 Report Card for: " + getStudentName() + " (ID: " + getStudentId() + ")");
-        System.out.println("-----------------------------------------------------------------");
-        System.out.printf("| %-30s | %-5s | %-3s | %-6s |\n", "Course", "Grade", "Mark", "Credits");
-        System.out.println("-----------------------------------------------------------------");
-
-        for (Map.Entry<String, Double> entry : getGrades().entrySet()) {
-            String course = entry.getKey();
-            double grade = entry.getValue();
-            String letter = getLetterGrade(grade);
-            int credits = courseCredits.get(course);
-            System.out.printf("| %-30s | %5.1f | %3s | %6d |\n", course, grade, letter, credits);
-        }
-
-        System.out.println("-----------------------------------------------------------------");
-        System.out.printf("| %-42s | %6.2f |\n", "GPA (on 4.0 scale)", calculateGPA());
-        System.out.println("-----------------------------------------------------------------");
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter student ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter student name: ");
-        String name = scanner.nextLine();
-
-        Student student = new Student(id, name);
-
-        // Demonstrate setter usage
-        System.out.print("\nWould you like to update student name? (yes/no): ");
-        if (scanner.nextLine().equalsIgnoreCase("yes")) {
-            System.out.print("Enter new student name: ");
-            student.setStudentName(scanner.nextLine());
-        }
-
-        // Add grades using the properly encapsulated method
-        for (String course : student.courseCredits.keySet()) {
-            while (true) {
-                System.out.print("Enter grade for " + course + " (0-100): ");
-                try {
-                    double grade = scanner.nextDouble();
-                    scanner.nextLine();
-                    if (student.addGrade(course, grade)) {
-                        break;
-                    }
-                    System.out.println("Invalid grade! Must be between 0-100.");
-                } catch (InputMismatchException e) {
-                    System.out.println("Please enter a numeric value!");
-                    scanner.nextLine();
-                }
-            }
-        }
-
-        // Demonstrate getter usage
-        System.out.println("\nStudent Information:");
-        System.out.println("ID: " + student.getStudentId());
-        System.out.println("Name : " + student.getStudentName());
-
-        student.printReportCard();
-        scanner.close();
-    }
-}
