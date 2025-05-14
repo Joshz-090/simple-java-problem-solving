@@ -246,3 +246,21 @@ class Student {
         return totalCredits == 0 ? 0.0 : totalGradePoints / totalCredits;
     }
 
+    public void printReportCard() {
+        System.out.println("\n📄 Report Card for: " + studentName);
+        System.out.println("=================================================================");
+        System.out.printf("| %-30s | %-6s | %-5s | %-7s | %-5s |\n",
+                "Course", "Grade", "Mark", "Credits", "Points");
+        System.out.println("=================================================================");
+
+        for (Map.Entry<String, Double> entry : grades.entrySet()) {
+            String course = entry.getKey();
+            double grade = entry.getValue();
+            String letter = getLetterGrade(grade);
+            int credits = courses.get(course);
+            double points = getGradePoints(letter);
+
+            System.out.printf("| %-30s | %6.1f | %-5s | %7d | %5.1f |\n",
+                    course, grade, letter, credits, points);
+        }
+
