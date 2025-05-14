@@ -190,7 +190,7 @@ public class Student {
         // Demonstrate getter usage
         System.out.println("\nStudent Information:");
         System.out.println("ID: " + student.getStudentId());
-        System.out.println("Name: " + student.getStudentName());
+        System.out.println("Name : " + student.getStudentName());
 
         student.printReportCard();
         scanner.close();
