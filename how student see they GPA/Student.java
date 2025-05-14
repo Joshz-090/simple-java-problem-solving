@@ -263,4 +263,9 @@ class Student {
             System.out.printf("| %-30s | %6.1f | %-5s | %7d | %5.1f |\n",
                     course, grade, letter, credits, points);
         }
-
+        
+        System.out.println("=================================================================");
+        System.out.printf("| %-58s | %5.2f |\n", "GPA (on 4.0 scale)", calculateGPA());
+        System.out.println("=================================================================");
+    }
+}
