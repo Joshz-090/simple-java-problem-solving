@@ -1,7 +1,22 @@
-# 🎓 Advanced GPA Calculator (Java)
+# 📊 GPA Calculator
 
-This is a colorful, interactive **GPA Calculator** written in Java. It allows students to enter their course information, grades, and credits, and then calculates their GPA on a 4.0 scale with a detailed report card.
+![Java](https://img.shields.io/badge/Java-17%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
+A simple Java application to calculate your GPA with visual feedback.
+
+## ✨ Features
+- Grade input validation (A-F scale)
+- Credit hour validation (1-5)
+- Color-coded GPA results
+- Simple terminal interface
+- Supports up to 10 courses
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Java JDK 17 or higher
+- Git (optional)
 ---
 
 ## 📷 Preview
