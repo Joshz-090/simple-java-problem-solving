@@ -52,7 +52,7 @@ A simple Java application to calculate your GPA with visual feedback.
    ```bash
    git clone https://github.com/your-username/gpa-calculator.git
    cd gpa-calculator
-````
+``
 
 2. **Compile the program**:
 
@@ -107,7 +107,7 @@ This project is open-source and free to use for educational purposes.
 
 Feel free to fork and contribute! 🎉
 
-```
+``
 
 ### ✅ How to Use the Images:
 - Save your two screenshots as `pic1.png` and `pic2.png`.
