@@ -103,16 +103,8 @@ This project is open-source and free to use for educational purposes.
 
 ## ✍️ Author
 
-* Developed by **\[Your Name]**
+* Developed by **\[Eyasu Zeruhun]**
 
 Feel free to fork and contribute! 🎉
 
 ``
-
-### ✅ How to Use the Images:
-- Save your two screenshots as `pic1.png` and `pic2.png`.
-- Put them in a folder called `images/` inside your project.
-- When you push the code to GitHub, they will display properly in the README.
-
-Let me know if you'd like this README personalized with your name or GitHub repo link.
-
