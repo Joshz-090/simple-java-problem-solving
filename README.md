@@ -7,7 +7,7 @@ A simple Java application to calculate your GPA with visual feedback.
 
 ## ✨ Features
 - Grade input validation (A-F scale) 
-- Credit hour validation (1-5)
+- Credit hour validation (1-5) 
 - Color-coded GPA results
 - Simple terminal interface
 - Supports up to 10 courses 
